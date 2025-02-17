@@ -1,6 +1,4 @@
-# Ymmersion-INFO-S4-Groupe4
-
-Projet E-Commerce
+# Projet E-Commerce
 
 Description
 
