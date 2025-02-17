@@ -10,7 +10,7 @@
 
   # __Description__
 
-Ce projet est un site web de commerce en ligne permettant aux utilisateurs de s'inscrire, se connecter, publier des articles à vendre, gérer leur panier et effectuer des achats. Une interface d'administration est également disponible pour gérer les utilisateurs et les articles.
+Ce projet est un site web de commerce en ligne permettant aux utilisateurs de s'inscrire, se connecter, gérer leur panier et effectuer des achats. Une interface d'administration est également disponible pour gérer les utilisateurs et les articles.
 
   # __Fonctionnalités__
 
