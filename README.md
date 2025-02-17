@@ -1,10 +1,10 @@
 # Projet E-Commerce
 
-  #__Description__
+  # __Description__
 
 Ce projet est un site web de commerce en ligne permettant aux utilisateurs de s'inscrire, se connecter, publier des articles à vendre, gérer leur panier et effectuer des achats. Une interface d'administration est également disponible pour gérer les utilisateurs et les articles.
 
-  #__Fonctionnalités__
+  # __Fonctionnalités__
 
 Authentification
 
@@ -46,7 +46,7 @@ Gestion des articles : Modification et suppression de tout article
 
 Gestion des utilisateurs : Modification et suppression de comptes utilisateurs
 
-  #__Technologies utilisées__
+  # __Technologies utilisées__
 
 Back-end : (à définir)
 
