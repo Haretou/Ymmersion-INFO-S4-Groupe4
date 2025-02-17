@@ -19,6 +19,22 @@ $is_logged_in = isset($_SESSION["user_id"]);
     <title>Accueil - E-Commerce</title>
 </head>
 <body>
+
+    <!-- Menu de navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.php">Accueil</a></li>
+            <?php if ($is_logged_in): ?>
+                <li>Bienvenue, <?php echo htmlspecialchars($_SESSION['username']); ?>!</li>
+                <li><a href="logout.php">Déconnexion</a></li>
+                <li><a href="cart.php">🛒 Voir le panier</a></li>
+            <?php else: ?>
+                <li><a href="login.php">Connexion</a></li>
+                <li><a href="register.php">Inscription</a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+
     <h1>Bienvenue sur notre site E-Commerce</h1>
 
     <?php if ($is_logged_in): ?>
@@ -44,12 +60,13 @@ $is_logged_in = isset($_SESSION["user_id"]);
 
                     <!-- Affichage d'un lien pour consulter l'article -->
                     <a href="../product/product.php?id=<?php echo $article['id']; ?>">Voir l'article</a>
+
                     <?php if ($is_logged_in): ?>
                         <!-- Ajouter au panier -->
                         <form action="cart.php" method="POST">
                             <input type="hidden" name="article_id" value="<?php echo $article['id']; ?>">
                             <label for="quantity">Quantité :</label>
-                            <input type="number" name="quantity" value="1" min="0" max="10">
+                            <input type="number" name="quantity" value="1" min="1" max="10">
                         </form>
                     <?php endif; ?>
                 </li>
@@ -59,10 +76,5 @@ $is_logged_in = isset($_SESSION["user_id"]);
         <p>Aucun article disponible.</p>
     <?php endif; ?>
 
-    <?php if ($is_logged_in): ?>
-        <!-- Affichage du panier -->
-        <h2>Votre Panier</h2>
-        <a href="cart.php">Voir le panier</a>
-    <?php endif; ?>
 </body>
 </html>

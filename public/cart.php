@@ -1,15 +1,18 @@
 <?php
-session_start();
 require_once '../config/config.php';
+session_start();
 
-// Vérifier si le panier est vide
-if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-    echo "Votre panier est vide.";
+// Vérifier si le panier contient des articles
+if (empty($_SESSION['cart'])) {
+    echo "<h1>Votre panier est vide.</h1>";
     exit;
 }
 
-// Calcul du total du panier
+// Calculer le total du panier
 $total = 0;
+foreach ($_SESSION['cart'] as $item) {
+    $total += $item['price'] * $item['quantity'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,52 +25,69 @@ $total = 0;
 <body>
     <h1>Votre Panier</h1>
 
-    <?php 
-    foreach ($_SESSION['cart'] as $article_id => $article) {
-        // Récupérer les informations de l'article dans la base de données
-        $stmt = $pdo->prepare("SELECT * FROM articles WHERE id = ?");
-        $stmt->execute([$article_id]);
-        $article_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Article</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($_SESSION['cart'] as $item): ?>
+                <tr>
+                    <td><img src="<?php echo htmlspecialchars($item['image']); ?>" width="50" alt="Image produit"></td>
+                    <td><?php echo htmlspecialchars($item['title']); ?></td>
+                    <td><?php echo htmlspecialchars($item['price']); ?> €</td>
+                    <td><?php echo $item['quantity']; ?></td>
+                    <td><?php echo $item['price'] * $item['quantity']; ?> €</td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-        // Vérifier si l'article existe
-        if ($article_data) {
-            ?>
-            <div>
-                <h3>
-                    <?php echo htmlspecialchars($article_data['title']); ?>
-                </h3>
+    <h2>Total : <?php echo $total; ?> €</h2>
 
-                <!-- Afficher l'image de l'article -->
-                <?php if (!empty($article_data['image'])): ?>
-                    <img src="../uploads/<?php echo htmlspecialchars($article_data['image']); ?>" alt="Image de l'article" width="100">
-                <?php else: ?>
-                    <p>Aucune image disponible</p>
-                <?php endif; ?>
+    <!-- Formulaire d'informations de livraison et facturation -->
+    <h2>Informations de Livraison & Facturation</h2>
+    <form action="payment.php" method="POST">
+        <h3>Informations de Livraison</h3>
+        <label for="shipping_name">Nom :</label>
+        <input type="text" name="shipping_name" required><br><br>
 
-                <p>
-                    <strong>Prix :</strong> 
-                    <?php echo htmlspecialchars($article_data['price']); ?> €
-                </p>
-                <p><strong>Quantité :</strong> <?php echo htmlspecialchars($article['quantity']); ?></p>
-            </div>
-            <hr>
+        <label for="shipping_address">Adresse :</label>
+        <input type="text" name="shipping_address" required><br><br>
 
-            <?php
-            // Calculer le total
-            $total += $article_data['price'] * $article['quantity'];
-        } else {
-            echo "Article non trouvé.";
-        }
-    }
-    ?>
+        <label for="shipping_city">Ville :</label>
+        <input type="text" name="shipping_city" required><br><br>
 
-    <h3>Total : <?php echo $total; ?> €</h3>
+        <label for="shipping_zip">Code Postal :</label>
+        <input type="text" name="shipping_zip" required><br><br>
 
-    <form action="checkout.php" method="POST">
+        <label for="shipping_country">Pays :</label>
+        <input type="text" name="shipping_country" required><br><br>
+
+        <h3>Informations de Facturation</h3>
+        <label for="billing_name">Nom :</label>
+        <input type="text" name="billing_name" required><br><br>
+
+        <label for="billing_address">Adresse :</label>
+        <input type="text" name="billing_address" required><br><br>
+
+        <label for="billing_city">Ville :</label>
+        <input type="text" name="billing_city" required><br><br>
+
+        <label for="billing_zip">Code Postal :</label>
+        <input type="text" name="billing_zip" required><br><br>
+
+        <label for="billing_country">Pays :</label>
+        <input type="text" name="billing_country" required><br><br>
+
         <button type="submit">Procéder au paiement</button>
     </form>
 
-    <br>
-    <a href="index.php">Retour à la boutique</a>
+    <a href="index.php">Continuer mes achats</a>
 </body>
 </html>
