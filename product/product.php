@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quantity'])) {
     } else {
         // Ajouter l'article au panier avec les informations complètes
         $_SESSION['cart'][$article_id] = [
+            'id' => $article['id'],
             'title' => $article['title'],
             'price' => $article['price'],
             'image' => $article['image'], // Assurez-vous que l'image est stockée ici
@@ -55,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quantity'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/style.css">
     <title><?php echo htmlspecialchars($article['title']); ?></title>
 </head>
 <body>
