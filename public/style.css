@@ -63,9 +63,10 @@ h2 {
     max-width: 1200px;
     margin: 40px auto;
     padding: 0 15px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
 }
 
 .articles-container ul {
@@ -78,7 +79,6 @@ h2 {
     background-color: #ffffff;
     padding: 15px;
     margin: 10px;
-    width: 30%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -148,17 +148,18 @@ form input[type="number"] {
 }
 
 
-/* Responsive */
+/* Responsive Grid */
 
 @media (max-width: 768px) {
-    .articles-container li {
-        width: 48%;
+    .articles-container {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
 
 @media (max-width: 480px) {
-    .articles-container li {
-        width: 100%;
+    .articles-container {
+        grid-template-columns: 1fr;
+        /* Une seule colonne sur les petits écrans */
     }
     .nav-container ul {
         text-align: left;
