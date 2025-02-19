@@ -91,7 +91,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <input type="hidden" name="article_id" value="<?php echo $article['id']; ?>">
                                 <label for="quantity">Quantité :</label>
                                 <input type="number" name="quantity" value="1" min="1" max="10">
-                                <button type="submit">Ajouter au panier</button>
+                                
                             </form>
                         <?php endif; ?>
                     </li>
