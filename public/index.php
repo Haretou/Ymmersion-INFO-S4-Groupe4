@@ -9,7 +9,7 @@ $is_admin = false;
 // Si l'utilisateur est connecté, récupérer son rôle
 if ($is_logged_in) {
     if (!isset($_SESSION["role"])) {
-        // Requête unique pour récupérer le rôle de l'utilisateur et le stocker en session
+        // Récup le rôle de la session 
         $stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
         $stmt->execute([$_SESSION["user_id"]]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -22,7 +22,7 @@ if ($is_logged_in) {
     $is_admin = ($_SESSION["role"] === "admin");
 }
 
-// Récupérer les articles depuis la base de données (les plus récents en premier)
+// On récup les articles des plus recents au plus anciens 
 $stmt = $pdo->prepare("SELECT * FROM articles ORDER BY created_at DESC");
 $stmt->execute();
 $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
