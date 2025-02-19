@@ -54,7 +54,8 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
     </nav>
 
-    <h1>Bienvenue sur notre site E-Commerce</h1>
+    
+    <h1>Bienvenue au PokéStore</h1>
 
     <!-- Bouton "Ajouter un article" uniquement visible pour les administrateurs -->
     <?php if ($is_admin): ?>
