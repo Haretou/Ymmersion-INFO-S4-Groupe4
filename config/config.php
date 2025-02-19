@@ -1,9 +1,9 @@
 <?php
-// Paramètres de connexion à la base de données
-$host = 'localhost'; // Change selon ton serveur (ex: 127.0.0.1, localhost, ou une IP distante)
-$dbname = 'php_exam_ANTOINE_RAF_GASPARD'; // Le nom de la base de données
-$username = 'root'; // Ton utilisateur MySQL (ex: root)
-$password = 'root'; // Mot de passe MySQL (vide par défaut sur MAMP)
+// Paramètres de connexion à la DB
+$host = 'localhost'; 
+$dbname = 'php_exam_ANTOINE_RAF_GASPARD'; // DB name
+$username = 'root'; 
+$password = 'root'; 
 
 // Connexion avec PDO
 try {

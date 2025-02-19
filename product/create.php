@@ -9,11 +9,11 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Vérification des champs
+    
     if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['price']) || empty($_POST['stock']) || empty($_FILES['image']['name'])) {
         $error = "Tous les champs sont requis";
     } else {
-        // Récupérer les données du formulaire
+        // Récupère le  formulaire
         $title = $_POST['title'];
         $description = $_POST['description'];
         $price = $_POST['price'];
