@@ -57,28 +57,28 @@ h2 {
 }
 
 
-/* Articles */
+/* 3-Column Layout for Articles */
 
 .articles-container {
-    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* Trois colonnes égales */
+    gap: 20px;
+    /* Espacement entre les colonnes */
     margin: 40px auto;
     padding: 0 15px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    justify-items: center;
+    max-width: 1200px;
 }
 
 .articles-container ul {
     padding: 0;
     list-style-type: none;
-    width: 100%;
 }
 
 .articles-container li {
     background-color: #ffffff;
     padding: 15px;
-    margin: 10px;
+    margin: 10px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -148,18 +148,19 @@ form input[type="number"] {
 }
 
 
-/* Responsive Grid */
+/* Responsive */
 
 @media (max-width: 768px) {
     .articles-container {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: 1fr 1fr;
+        /* Sur les petits écrans, on passe à 2 colonnes */
     }
 }
 
 @media (max-width: 480px) {
     .articles-container {
         grid-template-columns: 1fr;
-        /* Une seule colonne sur les petits écrans */
+        /* Sur les très petits écrans, on passe à 1 colonne */
     }
     .nav-container ul {
         text-align: left;
