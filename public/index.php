@@ -40,7 +40,7 @@ if ($category_filter) {
     $params['category'] = $category_filter;
 }
 
-$query .= " ORDER BY created_at DESC";  // Tri par date par défaut
+$query .= " ORDER BY created_at DESC";  // Tri par date 
 if (isset($_GET['sort'])) {
     switch ($_GET['sort']) {
         case 'price_asc':
@@ -82,7 +82,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <li><a href="../product/create.php">Modifier un article</a></li>  <!-- Lien de modification d'article -->
                 <?php endif; ?>
 
-                <!-- Lien vers les favoris -->
+                <!-- Lien vers  favoris -->
                 <li><a href="favorites.php">❤️ Voir mes favoris</a></li>
             <?php else: ?>
                 <li><a href="login.php">Connexion</a></li>
