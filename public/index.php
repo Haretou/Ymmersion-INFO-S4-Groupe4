@@ -67,7 +67,6 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    
     <nav class="nav-container">
         <ul>
             <li><a href="index.php">Accueil</a></li>
@@ -76,13 +75,11 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="cart.php">🛒 Voir le panier</a></li>
                 <li><a href="logout.php">Déconnexion</a></li>
 
-                <!-- Lien vers le panneau admin uniquement pour l'administrateur -->
                 <?php if ($is_admin): ?>
                     <li><a href="../product/admin.php">Panneau Admin</a></li>
-                    <li><a href="../product/create.php">Modifier un article</a></li>  <!-- Lien de modification d'article -->
+                    <li><a href="../product/create.php">Modifier un article</a></li>
                 <?php endif; ?>
 
-                <!-- Lien vers  favoris -->
                 <li><a href="favorites.php">❤️ Voir mes favoris</a></li>
             <?php else: ?>
                 <li><a href="login.php">Connexion</a></li>
@@ -93,26 +90,21 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <h1>Bienvenue au PokéStore</h1>
 
-    <!-- Barre de recherche -->
-    <form action="index.php" method="GET">
+    <form action="index.php" method="GET" class="search-form">
         <input type="text" name="search" placeholder="Rechercher un produit" value="<?php echo htmlspecialchars($search_query); ?>">
         <button type="submit">Rechercher</button>
     </form>
 
-    <!-- Filtre par catégorie -->
     <h3>Catégories</h3>
-    <ul>
+    <ul class="categories">
         <li><a href="index.php">Toutes les catégories</a></li>
         <?php foreach ($categories as $category): ?>
             <li><a href="index.php?category=<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></a></li>
         <?php endforeach; ?>
     </ul>
 
-    <!-- Tri des articles -->
     <h3>Trier par</h3>
-    <form action="index.php" method="GET">
-        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
-        <input type="hidden" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
+    <form action="index.php" method="GET" class="sort-form">
         <select name="sort" onchange="this.form.submit()">
             <option value="created_at" <?php if (!isset($_GET['sort'])) echo 'selected'; ?>>Date</option>
             <option value="price_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'price_asc') echo 'selected'; ?>>Prix croissant</option>
@@ -121,29 +113,27 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <h2>Nos articles en vente</h2>
-    <?php if (count($articles) > 0): ?>
-        <ul>
+    <div class="articles-container">
+        <?php if (count($articles) > 0): ?>
             <?php foreach ($articles as $article): ?>
-                <li>
+                <div class="article-card">
                     <h3><?php echo htmlspecialchars($article['title']); ?></h3>
                     <p><strong>Description :</strong> <?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
                     <p><strong>Prix :</strong> <?php echo htmlspecialchars($article['price']); ?> €</p>
                     <p><strong>Stock :</strong> <?php echo htmlspecialchars($article['stock']); ?></p>
 
-                        <!-- Affichage de l'image de l'article -->
-                        <?php if (!empty($article['image'])): ?>
-                            <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article" width="100">
-                        <?php endif; ?>
+                    <?php if (!empty($article['image'])): ?>
+                        <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article">
+                    <?php endif; ?>
 
-                        <!-- Lien vers la page du produit -->
-                        <a href="../product/product.php?id=<?php echo $article['id']; ?>">Voir l'article</a>
-
-                </li>
+                    <a href="../product/product.php?id=<?php echo $article['id']; ?>">Voir l'article</a>
+                </div>
             <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Aucun article disponible.</p>
-    <?php endif; ?>
+        <?php else: ?>
+            <p>Aucun article disponible.</p>
+        <?php endif; ?>
+    </div>
 
 </body>
 </html>
+
