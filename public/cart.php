@@ -22,7 +22,7 @@ if (empty($_SESSION['cart'])) {
         <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Panier vide" width="200">
         <h1 style="font-family: Arial, sans-serif; color: #333; margin-top: 20px;">Votre panier est vide 😢</h1>
         <p style="color: #666; font-size: 18px;">Ajoutez des articles à votre panier pour passer commande.</p>
-        <a href="index.php" style="margin-top: 20px; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 6px; font-size: 18px;">Continuer vos achats</a>
+        <a href="index.php" style="margin-top: 20px; padding: 12px 24px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 6px; font-size: 18px;">Continuer vos achats</a>
     </div>';
     exit;
 }
@@ -69,7 +69,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         h1, h2, h3 {
             text-align: center;
-            color: #007bff;
+            color: ##4CAF50;
         }
         h1 {
             margin-bottom: 30px;
@@ -148,7 +148,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         .payment-form input:focus {
             outline: none;
-            border-color: #007bff;
+            border-color: ##4CAF50;
             box-shadow: 0 0 5px rgba(0,123,255,0.5);
         }
         .payment-form .radio-group {
@@ -158,7 +158,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         .payment-form button {
             padding: 12px 20px;
-            background-color: #007bff;
+            background-color: ##4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;

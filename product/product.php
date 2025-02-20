@@ -93,76 +93,183 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../public/style.css">
     <title><?php echo htmlspecialchars($article['title']); ?></title>
+    <style>
+        /* Global */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #28a745; /* Vert utilisé précédemment */
+        }
+        .product-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            text-align: center;
+        }
+        .product-item {
+            background: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 300px;
+            text-align: center;
+        }
+        .product-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .product-item h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .product-item p {
+            margin: 5px 0;
+        }
+        .btn-add {
+            background-color: #28a745; /* Vert utilisé précédemment */
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-add:hover {
+            background-color: #218838; /* Plus foncé au survol */
+        }
+        .btn-secondary {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #6c757d;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+        .reviews-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .review-form {
+            margin-top: 20px;
+        }
+        .review-form input, .review-form textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .review-form button {
+            padding: 12px 20px;
+            background-color: #28a745; /* Vert utilisé précédemment */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .review-form button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1><?php echo htmlspecialchars($article['title']); ?></h1>
+    <div class="container">
+        <h1><?php echo htmlspecialchars($article['title']); ?></h1>
+        <p><strong>Date de création :</strong> <?php echo date("d/m/Y à H:i", strtotime($article['created_at'])); ?></p>
 
-    <!-- Affichage de la date de création -->
-    <p><strong>Date de création :</strong> <?php echo date("d/m/Y à H:i", strtotime($article['created_at'])); ?></p>
+        <div class="product-details">
+            <div class="product-item">
+                <?php if (!empty($article['image'])): ?>
+                    <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article">
+                <?php endif; ?>
 
-    <!-- Affichage de l'image de l'article -->
-    <?php if (!empty($article['image'])): ?>
-        <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article" width="200">
-    <?php endif; ?>
+                <h3><?php echo htmlspecialchars($article['title']); ?></h3>
+                <p><strong>Description :</strong> <?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
+                <p><strong>Prix :</strong> <?php echo htmlspecialchars($article['price']); ?> €</p>
 
-    <p><strong>Description :</strong> <?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
-    <p><strong>Prix :</strong> <?php echo htmlspecialchars($article['price']); ?> €</p>
+                <?php if ($is_logged_in): ?>
+                    <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
+                        <label for="quantity">Quantité :</label>
+                        <input type="number" name="quantity" value="1" min="1">
+                        <button type="submit" class="btn-add">Ajouter au panier</button>
+                    </form>
 
-    <?php if ($is_logged_in): ?>
-        <!-- Ajouter au panier -->
-        <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
-            <label for="quantity">Quantité :</label>
-            <input type="number" name="quantity" value="1" min="1">
-            <button type="submit">Ajouter au panier</button>
-        </form>
+                    <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
+                        <button type="submit" name="add_to_favorites" class="btn-add">Ajouter aux favoris</button>
+                    </form>
+                <?php else: ?>
+                    <p><a href="login.php">Connectez-vous</a> pour ajouter cet article au panier ou aux favoris</p>
+                <?php endif; ?>
+            </div>
+        </div>
 
-        <!-- Ajouter aux favoris -->
-        <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
-            <button type="submit" name="add_to_favorites">Ajouter aux favoris</button>
-        </form>
-    <?php else: ?>
-        <p><a href="login.php">Connectez-vous pour ajouter cet article au panier ou aux favoris</a></p>
-    <?php endif; ?>
+        <!-- Section des évaluations -->
+        <div class="reviews-section">
+            <h3>Évaluations de cet article</h3>
+            <?php
+            $stmtReviews = $pdo->prepare("SELECT r.rating, r.comment, u.username FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.article_id = ?");
+            $stmtReviews->execute([$article_id]);
+            $reviews = $stmtReviews->fetchAll(PDO::FETCH_ASSOC);
 
-    <!-- Affichage des évaluations -->
-    <h3>Évaluations de cet article</h3>
-    <?php
-    $stmtReviews = $pdo->prepare("SELECT r.rating, r.comment, u.username FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.article_id = ?");
-    $stmtReviews->execute([$article_id]);
-    $reviews = $stmtReviews->fetchAll(PDO::FETCH_ASSOC);
+            if (count($reviews) > 0) {
+                foreach ($reviews as $review) {
+                    echo "<p><strong>" . htmlspecialchars($review['username']) . "</strong> a donné une note de " . htmlspecialchars($review['rating']) . " étoiles.</p>";
+                    echo "<p>" . nl2br(htmlspecialchars($review['comment'])) . "</p>";
+                }
+            } else {
+                echo "<p>Aucune évaluation pour cet article.</p>";
+            }
+            ?>
 
-    if (count($reviews) > 0) {
-        foreach ($reviews as $review) {
-            echo "<p><strong>" . htmlspecialchars($review['username']) . "</strong> a donné une note de " . htmlspecialchars($review['rating']) . " étoiles.</p>";
-            echo "<p>" . nl2br(htmlspecialchars($review['comment'])) . "</p>";
-        }
-    } else {
-        echo "<p>Aucune évaluation pour cet article.</p>";
-    }
-    ?>
-
-    <?php if ($is_logged_in): ?>
-        <!-- Formulaire pour laisser une évaluation -->
-        <h3>Laissez une évaluation</h3>
-        <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
-            <label for="rating">Note :</label>
-            <select name="rating" id="rating" required>
-                <option value="1">1 étoile</option>
-                <option value="2">2 étoiles</option>
-                <option value="3">3 étoiles</option>
-                <option value="4">4 étoiles</option>
-                <option value="5">5 étoiles</option>
-            </select>
-            <br>
-            <label for="comment">Commentaire :</label>
-            <textarea name="comment" id="comment" rows="4"></textarea>
-            <br>
-            <button type="submit" name="submit_review">Soumettre l'évaluation</button>
-        </form>
-    <?php endif; ?>
-
-    <br>
-    <a href="../public/index.php">Retour à la liste des articles</a>
+            <?php if ($is_logged_in): ?>
+                <div class="review-form">
+                    <h3>Laissez une évaluation</h3>
+                    <form action="product.php?id=<?php echo $article_id; ?>" method="POST">
+                        <label for="rating">Note :</label>
+                        <select name="rating" id="rating" required>
+                            <option value="1">1 étoile</option>
+                            <option value="2">2 étoiles</option>
+                            <option value="3">3 étoiles</option>
+                            <option value="4">4 étoiles</option>
+                            <option value="5">5 étoiles</option>
+                        </select>
+                        <br>
+                        <label for="comment">Commentaire :</label>
+                        <textarea name="comment" id="comment" rows="4"></textarea>
+                        <br>
+                        <button type="submit" name="submit_review">Soumettre l'évaluation</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        </div>
+        
+        <a href="../public/index.php" class="btn-secondary">Retour à la liste des articles</a>
+    </div>
 </body>
 </html>
-
