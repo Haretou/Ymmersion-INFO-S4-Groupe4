@@ -165,3 +165,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_review'])) {
     <a href="../public/index.php">Retour à la liste des articles</a>
 </body>
 </html>
+
