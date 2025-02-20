@@ -47,6 +47,11 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="account.php">👤 Mon Compte</a></li>
                 <li><a href="cart.php">🛒 Voir le panier</a></li>
                 <li><a href="logout.php">Déconnexion</a></li>
+
+                <!-- Lien vers le panneau admin uniquement pour l'administrateur -->
+                <?php if ($is_admin): ?>
+                    <li><a href="../product/admin.php">Panneau Admin</a></li>
+                <?php endif; ?>
             <?php else: ?>
                 <li><a href="login.php">Connexion</a></li>
                 <li><a href="register.php">Inscription</a></li>
@@ -87,7 +92,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <input type="hidden" name="article_id" value="<?php echo $article['id']; ?>">
                             <label for="quantity">Quantité :</label>
                             <input type="number" name="quantity" value="1" min="1" max="10">
-                           
+                            <button type="submit">Ajouter au panier</button>
                         </form>
                     <?php endif; ?>
                 </li>

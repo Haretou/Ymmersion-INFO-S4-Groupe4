@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['quantity'])) {
             'id' => $article['id'],
             'title' => $article['title'],
             'price' => $article['price'],
+            'description'=> $article['description'],
             'image' => $article['image'], // Assurez-vous que l'image est stockée ici
             'quantity' => $quantity
         ];
