@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$title, $description, $price, $stock, $image_path, $_SESSION['user_id'], $category_id]);
 
         // Rediriger vers la page d'accueil ou autre page après la création
-        header("Location: /index.php");
+        header("Location: http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/index.php");
         exit;
     }
 }
