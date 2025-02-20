@@ -8,16 +8,22 @@ if (!isset($_SESSION["user_id"])) {
     exit;
 }
 
+// Récupérer les catégories
+$stmt = $pdo->prepare("SELECT * FROM categories");
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérification des champs
-    if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['price']) || empty($_POST['stock']) || empty($_FILES['image']['name'])) {
-        $error = "Tous les champs sont requis";
+    if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['price']) || empty($_POST['stock']) || empty($_FILES['image']['name']) || empty($_POST['category_id'])) {
+        $error = "Tous les champs sont requis, y compris la catégorie.";
     } else {
         // Récupérer les données du formulaire
         $title = $_POST['title'];
         $description = $_POST['description'];
         $price = $_POST['price'];
         $stock = $_POST['stock'];
+        $category_id = $_POST['category_id'];
 
         // Traitement de l'image
         $image_path = '';
@@ -51,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Préparer et exécuter la requête d'insertion
-        $stmt = $pdo->prepare("INSERT INTO articles (title, description, price, stock, image, user_id) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$title, $description, $price, $stock, $image_path, $_SESSION['user_id']]);
+        $stmt = $pdo->prepare("INSERT INTO articles (title, description, price, stock, image, user_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$title, $description, $price, $stock, $image_path, $_SESSION['user_id'], $category_id]);
 
         // Rediriger vers la page d'accueil ou autre page après la création
         header("Location: /index.php");
@@ -78,6 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <label for="stock">Stock :</label>
     <input type="number" name="stock" id="stock" required>
+
+    <label for="category_id">Catégorie :</label>
+    <select name="category_id" id="category_id" required>
+        <option value="">Sélectionner une catégorie</option>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
+        <?php endforeach; ?>
+    </select>
 
     <label for="image">Image de l'article :</label>
     <input type="file" name="image" id="image" accept="image/*" required>

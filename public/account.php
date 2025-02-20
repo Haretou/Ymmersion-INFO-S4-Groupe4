@@ -21,6 +21,11 @@ $stmtArticles = $pdo->prepare("SELECT * FROM articles WHERE user_id = ?");
 $stmtArticles->execute([$viewing_user_id]);
 $articles = $stmtArticles->fetchAll(PDO::FETCH_ASSOC);
 
+// Récupérer les favoris de l'utilisateur
+$stmtFavorites = $pdo->prepare("SELECT a.id, a.title, a.price FROM favorites f JOIN articles a ON f.article_id = a.id WHERE f.user_id = ?");
+$stmtFavorites->execute([$viewing_user_id]);
+$favorites = $stmtFavorites->fetchAll(PDO::FETCH_ASSOC);
+
 // Récupérer les achats si c'est l'utilisateur connecté
 if ($is_own_account) {
     $stmtPurchases = $pdo->prepare("
@@ -75,6 +80,21 @@ if ($is_own_account) {
         <p>Aucun article publié.</p>
     <?php endif; ?>
 
+    <h2>Mes favoris</h2>
+    <?php if (count($favorites) > 0): ?>
+        <ul>
+            <?php foreach ($favorites as $favorite): ?>
+                <li>
+                    <a href="product.php?id=<?php echo $favorite['id']; ?>">
+                        <?php echo htmlspecialchars($favorite['title']); ?>
+                    </a> - <?php echo htmlspecialchars($favorite['price']); ?> €
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Aucun favori pour l'instant.</p>
+    <?php endif; ?>
+
     <?php if ($is_own_account): ?>
         <h2>Mes achats</h2>
         <?php if (count($purchases) > 0): ?>
@@ -89,17 +109,6 @@ if ($is_own_account) {
         <?php else: ?>
             <p>Vous n'avez encore rien acheté.</p>
         <?php endif; ?>
-
-        <h2>Modifier mes informations</h2>
-        <form action="update_account.php" method="post">
-            <label for="new_email">Nouvel email :</label>
-            <input type="email" name="new_email" id="new_email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-
-            <label for="new_password">Nouveau mot de passe :</label>
-            <input type="password" name="new_password" id="new_password" placeholder="Laisser vide pour ne pas changer">
-
-            <button type="submit">Mettre à jour</button>
-        </form>
     <?php endif; ?>
 
     <br>
