@@ -14,11 +14,17 @@ $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<<<<<<< HEAD
     // Vérification des champs
     if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['price']) || empty($_POST['stock']) || empty($_FILES['image']['name']) || empty($_POST['category_id'])) {
         $error = "Tous les champs sont requis, y compris la catégorie.";
+=======
+    
+    if (empty($_POST['title']) || empty($_POST['description']) || empty($_POST['price']) || empty($_POST['stock']) || empty($_FILES['image']['name'])) {
+        $error = "Tous les champs sont requis";
+>>>>>>> origin/main
     } else {
-        // Récupérer les données du formulaire
+        // Récupère le  formulaire
         $title = $_POST['title'];
         $description = $_POST['description'];
         $price = $_POST['price'];

@@ -56,8 +56,8 @@ Ce projet est un site web de commerce en ligne permettant aux utilisateurs de s'
 
   # __Technologies utilisées__
 
-Back-end : (à définir)
+Back-end : PHP / HTML
 
-Front-end : (à définir)
+Front-end : HTML / CSS
 
 Base de données : phpMyAdmin
