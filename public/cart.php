@@ -69,7 +69,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         h1, h2, h3 {
             text-align: center;
-            color: ##4CAF50;
+            color: #4CAF50;
         }
         h1 {
             margin-bottom: 30px;
@@ -158,7 +158,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         .payment-form button {
             padding: 12px 20px;
-            background-color: ##4CAF50;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;
