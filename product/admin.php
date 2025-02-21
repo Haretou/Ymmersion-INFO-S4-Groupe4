@@ -1,8 +1,8 @@
 <?php
 session_start();
-require '../config/config.php'; // Fichier de connexion 脿 la base de donn茅es
+require '../config/config.php'; // Fichier de connexion à la base de données
 
-// V茅rification de l'authentification et du r么le administrateur
+// Vérification de l'authentification et du rôle administrateur
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: ..//index.php');
     exit();
@@ -11,8 +11,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Suppression d'un article
 if (isset($_GET['delete_article'])) {
     $article_id = intval($_GET['delete_article']);
+
+    // Suppression de l'article dans la table panier (d'abord)
+    $stmt = $pdo->prepare("DELETE FROM panier WHERE article_id = ?");
+    $stmt->execute([$article_id]);
+
+    // Maintenant, on peut supprimer l'article de la table articles
     $stmt = $pdo->prepare("DELETE FROM articles WHERE id = ?");
     $stmt->execute([$article_id]);
+
     header('Location: admin.php');
     exit();
 }
@@ -26,10 +33,10 @@ if (isset($_GET['delete_user'])) {
     exit();
 }
 
-// R茅cup茅ration des articles
+// Récupération des articles
 $articles = $pdo->query("SELECT * FROM articles")->fetchAll(PDO::FETCH_ASSOC);
 
-// R茅cup茅ration des utilisateurs
+// Récupération des utilisateurs
 $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -180,7 +187,7 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>ID</th>
                 <th>Email</th>
-                <th>R么le</th>
+                <th>Rôle</th>
                 <th>Actions</th>
             </tr>
             <?php foreach ($users as $user) : ?>

@@ -23,7 +23,7 @@ $stmt = $pdo->prepare("SELECT email, username, balance FROM users WHERE id = ?")
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $email = $user['email'];
-$userName = "{$user['username']}";
+$userName = $user['username'];
 $balance = $user['balance'];
 
 // Vérifier la méthode de paiement
@@ -39,6 +39,7 @@ if (!isset($_SESSION['shipping']) || !isset($_SESSION['billing'])) {
     exit;
 }
 
+// Fonction de nettoyage des données utilisateur
 function sanitize_input($data) {
     return htmlspecialchars(trim($data));
 }
@@ -76,6 +77,7 @@ if ($payment_method === "balance") {
         exit;
     }
 } else {
+    // Stripe Payment
     \Stripe\Stripe::setApiKey('sk_test_51QtVnYDIVWd9Ur2VSfC0PWmSsrFPBl4NQ1yyAYcH3B43vbW8MXgi2M22AapIN2Nge0L70yhFcHN7pD0Vun2axPAo00Hrkhz5MR');
     try {
         $checkout_session = \Stripe\Checkout\Session::create([
@@ -86,8 +88,8 @@ if ($payment_method === "balance") {
             ], $_SESSION['cart']),
             'mode' => 'payment',
             'customer_email' => $email,
-            'success_url' => 'http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/payment_success.php',
-            'cancel_url' => 'http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/cart.php',
+            'success_url' => 'http://localhost:8888/exam/Ymmersion-INFO-S4-Groupe4/public/payment_success.php',
+            'cancel_url' => 'http://localhost:8888/exam/Ymmersion-INFO-S4-Groupe4/public/cart.php',
         ]);
         header("Location: " . $checkout_session->url);
         exit;
@@ -116,8 +118,8 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'antoinecabanes4@gmail.com';
-    $mail->Password = 'vdld ttgk omzc qtxf';
+    $mail->Username = 'antoinecabanes4@gmail.com'; // Utiliser une variable d'environnement pour stocker ces informations
+    $mail->Password = 'vdld ttgk omzc qtxf'; // Utiliser une variable d'environnement pour stocker ces informations
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     $mail->setFrom('antoinecabanes4@gmail.com', 'Pokéstore');
@@ -168,7 +170,7 @@ try {
     echo "Erreur d'envoi de l'email : {$mail->ErrorInfo}";
 }
 
-// Redirection
+// Redirection vers la page de confirmation de paiement
 header("Location: payment_success.php");
 exit;
 ?>
