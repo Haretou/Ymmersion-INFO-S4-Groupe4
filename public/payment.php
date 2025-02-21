@@ -23,7 +23,7 @@ $stmt = $pdo->prepare("SELECT email, username, balance FROM users WHERE id = ?")
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 $email = $user['email'];
-$userName = $user['username'];
+$userName = "{$user['username']}";
 $balance = $user['balance'];
 
 // Vérifier la méthode de paiement
@@ -34,23 +34,19 @@ if (!isset($_POST['payment_method'])) {
 $payment_method = $_POST['payment_method'];
 
 // Vérifier et récupérer les adresses
-if (!isset($_SESSION['shipping']) || !isset($_SESSION['billing'])) {
-    echo "Les informations de livraison et de facturation sont requises.";
-    exit;
-}
 
-// Fonction de nettoyage des données utilisateur
+
 function sanitize_input($data) {
     return htmlspecialchars(trim($data));
 }
 
 // Insérer les adresses
 $shipping_stmt = $pdo->prepare("INSERT INTO shipping_addresses (user_id, name, address, city, zip, country) VALUES (?, ?, ?, ?, ?, ?)");
-$shipping_stmt->execute([$user_id, sanitize_input($_SESSION['shipping']['name']), sanitize_input($_SESSION['shipping']['address']), sanitize_input($_SESSION['shipping']['city']), sanitize_input($_SESSION['shipping']['zip']), sanitize_input($_SESSION['shipping']['country'])]);
+$shipping_stmt->execute([$user_id, sanitize_input($_POST['shipping_name']), sanitize_input($_POST['shipping_address']), sanitize_input($_POST['shipping_city']), sanitize_input($_POST['shipping_zip']), sanitize_input($_POST['shipping_country'])]);
 $shipping_id = $pdo->lastInsertId();
 
 $billing_stmt = $pdo->prepare("INSERT INTO billing_addresses (user_id, name, address, city, zip, country) VALUES (?, ?, ?, ?, ?, ?)");
-$billing_stmt->execute([$user_id, sanitize_input($_SESSION['billing']['name']), sanitize_input($_SESSION['billing']['address']), sanitize_input($_SESSION['billing']['city']), sanitize_input($_SESSION['billing']['zip']), sanitize_input($_SESSION['billing']['country'])]);
+$billing_stmt->execute([$user_id, sanitize_input($_POST['billing_name']), sanitize_input($_POST['billing_address']), sanitize_input($_POST['billing_city']), sanitize_input($_POST['billing_zip']), sanitize_input($_POST['billing_country'])]);
 $billing_id = $pdo->lastInsertId();
 
 // Récupérer les informations complètes des adresses
@@ -77,7 +73,6 @@ if ($payment_method === "balance") {
         exit;
     }
 } else {
-    // Stripe Payment
     \Stripe\Stripe::setApiKey('sk_test_51QtVnYDIVWd9Ur2VSfC0PWmSsrFPBl4NQ1yyAYcH3B43vbW8MXgi2M22AapIN2Nge0L70yhFcHN7pD0Vun2axPAo00Hrkhz5MR');
     try {
         $checkout_session = \Stripe\Checkout\Session::create([
@@ -88,8 +83,8 @@ if ($payment_method === "balance") {
             ], $_SESSION['cart']),
             'mode' => 'payment',
             'customer_email' => $email,
-            'success_url' => 'http://localhost:8888/exam/Ymmersion-INFO-S4-Groupe4/public/payment_success.php',
-            'cancel_url' => 'http://localhost:8888/exam/Ymmersion-INFO-S4-Groupe4/public/cart.php',
+            'success_url' => 'http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/payment_success.php',
+            'cancel_url' => 'http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/cart.php',
         ]);
         header("Location: " . $checkout_session->url);
         exit;
@@ -118,8 +113,8 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'antoinecabanes4@gmail.com'; // Utiliser une variable d'environnement pour stocker ces informations
-    $mail->Password = 'vdld ttgk omzc qtxf'; // Utiliser une variable d'environnement pour stocker ces informations
+    $mail->Username = 'antoinecabanes4@gmail.com';
+    $mail->Password = 'vdld ttgk omzc qtxf';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     $mail->setFrom('antoinecabanes4@gmail.com', 'Pokéstore');
@@ -170,7 +165,7 @@ try {
     echo "Erreur d'envoi de l'email : {$mail->ErrorInfo}";
 }
 
-// Redirection vers la page de confirmation de paiement
+// Redirection
 header("Location: payment_success.php");
 exit;
 ?>
