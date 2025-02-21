@@ -257,9 +257,7 @@ foreach ($_SESSION['cart'] as $item) {
                 
                 <h2>Méthode de paiement</h2>
                 <div class="radio-group">
-                    <label>
-                        <input type="radio" name="payment_method" value="stripe" checked> Payer avec Stripe
-                    </label>
+                    
                     <label>
                         <input type="radio" name="payment_method" value="balance"> Payer avec mon solde
                     </label>
