@@ -43,204 +43,197 @@ if ($is_own_account) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Compte de <?php echo htmlspecialchars($user['username']); ?></title>
-</head>
-<body>
-    <h1>Compte de <?php echo htmlspecialchars($user['username']); ?></h1>
-
-    <h2>Informations du compte</h2>
-    <p><strong>Nom d'utilisateur :</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-    <p><strong>Email :</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-
-    <?php if ($is_own_account): ?>
-        <h2>Mon solde</h2>
-        <p><strong>Votre solde :</strong> <?php echo number_format($user['balance'], 2); ?> €</p>
-
-        <h2>Ajouter de l'argent à mon solde</h2>
-        <form action="stripe_payment.php" method="POST">
-            <label for="amount">Montant (€) :</label>
-            <input type="number" name="amount" id="amount" min="1" required>
-            <button type="submit">Ajouter via Stripe</button>
-        </form>
-    <?php endif; ?>
-
-    <h2>Articles publiés</h2>
-    <?php if (count($articles) > 0): ?>
-        <ul>
-            <?php foreach ($articles as $article): ?>
-                <li>
-                    <a href="product.php?id=<?php echo $article['id']; ?>">
-                        <?php echo htmlspecialchars($article['title']); ?>
-                    </a> - <?php echo htmlspecialchars($article['price']); ?> €
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Aucun article publié.</p>
-    <?php endif; ?>
-
-    <h2>Mes favoris</h2>
-    <?php if (count($favorites) > 0): ?>
-        <ul>
-            <?php foreach ($favorites as $favorite): ?>
-                <li>
-                    <a href="product.php?id=<?php echo $favorite['id']; ?>">
-                        <?php echo htmlspecialchars($favorite['title']); ?>
-                    </a> - <?php echo htmlspecialchars($favorite['price']); ?> €
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Aucun favori pour l'instant.</p>
-    <?php endif; ?>
-
-    <?php if ($is_own_account): ?>
-        <h2>Mes achats</h2>
-        <?php if (count($purchases) > 0): ?>
-            <ul>
-                <?php foreach ($purchases as $purchase): ?>
-                    <li>
-                        Commande #<?php echo $purchase['id']; ?> - <?php echo $purchase['total_price']; ?> €
-                        (Passée le <?php echo $purchase['created_at']; ?>)
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p>Vous n'avez encore rien acheté.</p>
-        <?php endif; ?>
-    <?php endif; ?>
-
-    <br>
-    <a href="index.php"><button>🏠 Revenir à l'accueil</button></a>
-    <a href="logout.php"><button>🚪 Se déconnecter</button></a>
-
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
             text-align: center;
+            margin-bottom: 40px;
         }
 
-        header h1 {
-            margin: 0;
+        .user-info, .balance-section, .articles-section, .favorites-section, .purchases-section {
+            margin-bottom: 30px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 1rem;
+        .item-list {
+            list-style: none;
+            margin-top: 10px;
         }
 
-        h2 {
-            color: #5e5e5e;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
+        .item-list li {
+            margin-bottom: 8px;
         }
 
-        p {
-            font-size: 1rem;
-            margin: 0.5rem 0;
-        }
-
-        a {
+        .article-link, .favorite-link {
+            color: #2980b9;
             text-decoration: none;
-            color: #4CAF50;
+            font-weight: bold;
         }
 
-        a:hover {
+        .article-link:hover, .favorite-link:hover {
             text-decoration: underline;
         }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .content-section {
-            background-color: white;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .content-section ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .content-section li {
-            border-bottom: 1px solid #eee;
-            padding: 0.8rem 0;
-        }
-
-        .content-section li a {
-            color: #333;
-        }
-
-        .content-section li a:hover {
-            color: #4CAF50;
-        }
-
         .balance-form input {
-            padding: 0.6rem;
+            padding: 10px;
+            font-size: 1rem;
+            width: 200px;
+            margin-right: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            width: 150px;
         }
 
         .balance-form button {
-            padding: 0.6rem 1rem;
-        }
-
-        footer {
-            background-color: #333;
+            padding: 10px 15px;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 5px;
             color: white;
-            text-align: center;
-            padding: 1rem;
-            position: absolute;
-            width: 100%;
-            bottom: 0;
+            cursor: pointer;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 0.5rem;
-            }
+        .balance-form button:hover {
+            background-color: #2ecc71;
+        }
 
-            header h1 {
-                font-size: 1.5rem;
-            }
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+        }
 
-            h2 {
-                font-size: 1.2rem;
-            }
+        button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-            button {
-                padding: 0.5rem 1rem;
-            }
+        .btn-main {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-main:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #c0392b;
         }
     </style>
+</head>
+<body>
+    <div class="profile-container">
+        <header>
+            <h1>Profil de <?php echo htmlspecialchars($user['username']); ?></h1>
+        </header>
+
+        <section class="user-info">
+            <h2>Informations Personnelles</h2>
+            <p><strong>Nom d'utilisateur :</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+            <p><strong>Email :</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+        </section>
+
+        <section class="balance-section">
+            <?php if ($is_own_account): ?>
+                <h2>Mon Solde</h2>
+                <p><strong>Solde actuel :</strong> <?php echo number_format($user['balance'], 2); ?> €</p>
+
+                <h3>Ajouter de l'argent à mon solde</h3>
+                <form action="stripe_payment.php" method="POST" class="balance-form">
+                    <input type="number" name="amount" id="amount" placeholder="Montant (€)" min="1" required>
+                    <button type="submit">Ajouter via Stripe</button>
+                </form>
+            <?php endif; ?>
+        </section>
+
+        <section class="articles-section">
+            <h2>Articles publiés</h2>
+            <?php if (count($articles) > 0): ?>
+                <ul class="item-list">
+                    <?php foreach ($articles as $article): ?>
+                        <li>
+                            <a href="product.php?id=<?php echo $article['id']; ?>" class="article-link">
+                                <?php echo htmlspecialchars($article['title']); ?> - <?php echo htmlspecialchars($article['price']); ?> €
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p>Aucun article publié.</p>
+            <?php endif; ?>
+        </section>
+
+        <section class="favorites-section">
+            <h2>Mes Favoris</h2>
+            <?php if (count($favorites) > 0): ?>
+                <ul class="item-list">
+                    <?php foreach ($favorites as $favorite): ?>
+                        <li>
+                            <a href="product.php?id=<?php echo $favorite['id']; ?>" class="favorite-link">
+                                <?php echo htmlspecialchars($favorite['title']); ?> - <?php echo htmlspecialchars($favorite['price']); ?> €
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p>Aucun favori pour l'instant.</p>
+            <?php endif; ?>
+        </section>
+
+        <?php if ($is_own_account): ?>
+            <section class="purchases-section">
+                <h2>Mes Achats</h2>
+                <?php if (count($purchases) > 0): ?>
+                    <ul class="item-list">
+                        <?php foreach ($purchases as $purchase): ?>
+                            <li>
+                                Commande #<?php echo $purchase['id']; ?> - <?php echo number_format($purchase['total_price'], 2); ?> €
+                                (Passée le <?php echo $purchase['created_at']; ?>)
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>Vous n'avez encore rien acheté.</p>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+
+        <div class="buttons-container">
+            <a href="index.php"><button class="btn-main">🏠 Accueil</button></a>
+            <a href="logout.php"><button class="btn-secondary">🚪 Se Déconnecter</button></a>
+        </div>
+    </div>
 </body>
 </html>
