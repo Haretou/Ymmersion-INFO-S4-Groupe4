@@ -43,7 +43,78 @@ if ($is_own_account) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Compte de <?php echo htmlspecialchars($user['username']); ?></title>
+</head>
+<body>
+    <h1>Compte de <?php echo htmlspecialchars($user['username']); ?></h1>
+
+    <h2>Informations du compte</h2>
+    <p><strong>Nom d'utilisateur :</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+    <p><strong>Email :</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+
+    <?php if ($is_own_account): ?>
+        <h2>Mon solde</h2>
+        <p><strong>Votre solde :</strong> <?php echo number_format($user['balance'], 2); ?> €</p>
+
+        <h2>Ajouter de l'argent à mon solde</h2>
+        <form action="stripe_payment.php" method="POST">
+            <label for="amount">Montant (€) :</label>
+            <input type="number" name="amount" id="amount" min="1" required>
+            <button type="submit">Ajouter via Stripe</button>
+        </form>
+    <?php endif; ?>
+
+    <h2>Articles publiés</h2>
+    <?php if (count($articles) > 0): ?>
+        <ul>
+            <?php foreach ($articles as $article): ?>
+                <li>
+                    <a href="product.php?id=<?php echo $article['id']; ?>">
+                        <?php echo htmlspecialchars($article['title']); ?>
+                    </a> - <?php echo htmlspecialchars($article['price']); ?> €
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Aucun article publié.</p>
+    <?php endif; ?>
+
+    <h2>Mes favoris</h2>
+    <?php if (count($favorites) > 0): ?>
+        <ul>
+            <?php foreach ($favorites as $favorite): ?>
+                <li>
+                    <a href="product.php?id=<?php echo $favorite['id']; ?>">
+                        <?php echo htmlspecialchars($favorite['title']); ?>
+                    </a> - <?php echo htmlspecialchars($favorite['price']); ?> €
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Aucun favori pour l'instant.</p>
+    <?php endif; ?>
+
+    <?php if ($is_own_account): ?>
+        <h2>Mes achats</h2>
+        <?php if (count($purchases) > 0): ?>
+            <ul>
+                <?php foreach ($purchases as $purchase): ?>
+                    <li>
+                        Commande #<?php echo $purchase['id']; ?> - <?php echo $purchase['total_price']; ?> €
+                        (Passée le <?php echo $purchase['created_at']; ?>)
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>Vous n'avez encore rien acheté.</p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <br>
+    <a href="index.php"><button>🏠 Revenir à l'accueil</button></a>
+    <a href="logout.php"><button>🚪 Se déconnecter</button></a>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -171,91 +242,5 @@ if ($is_own_account) {
             }
         }
     </style>
-</head>
-<body>
-
-    <header>
-        <h1>Bienvenue sur le compte de <?php echo htmlspecialchars($user['username']); ?></h1>
-    </header>
-
-    <div class="container">
-        <section class="content-section">
-            <h2>Informations du compte</h2>
-            <p><strong>Nom d'utilisateur :</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-            <p><strong>Email :</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-        </section>
-
-        <?php if ($is_own_account): ?>
-        <section class="content-section">
-            <h2>Mon solde</h2>
-            <p><strong>Votre solde :</strong> <?php echo number_format($user['balance'], 2); ?> €</p>
-
-            <h3>Ajouter de l'argent à mon solde</h3>
-            <form action="stripe_payment.php" method="POST" class="balance-form">
-                <label for="amount">Montant (€) :</label>
-                <input type="number" name="amount" id="amount" min="1" required>
-                <button type="submit">Ajouter via Stripe</button>
-            </form>
-        </section>
-        <?php endif; ?>
-
-        <section class="content-section">
-            <h2>Articles publiés</h2>
-            <?php if (count($articles) > 0): ?>
-                <ul>
-                    <?php foreach ($articles as $article): ?>
-                        <li>
-                            <a href="product.php?id=<?php echo $article['id']; ?>">
-                                <?php echo htmlspecialchars($article['title']); ?>
-                            </a> - <?php echo htmlspecialchars($article['price']); ?> €
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>Aucun article publié.</p>
-            <?php endif; ?>
-        </section>
-
-        <section class="content-section">
-            <h2>Mes favoris</h2>
-            <?php if (count($favorites) > 0): ?>
-                <ul>
-                    <?php foreach ($favorites as $favorite): ?>
-                        <li>
-                            <a href="product.php?id=<?php echo $favorite['id']; ?>">
-                                <?php echo htmlspecialchars($favorite['title']); ?>
-                            </a> - <?php echo htmlspecialchars($favorite['price']); ?> €
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>Aucun favori pour l'instant.</p>
-            <?php endif; ?>
-        </section>
-
-        <?php if ($is_own_account): ?>
-        <section class="content-section">
-            <h2>Mes achats</h2>
-            <?php if (count($purchases) > 0): ?>
-                <ul>
-                    <?php foreach ($purchases as $purchase): ?>
-                        <li>
-                            Commande #<?php echo $purchase['id']; ?> - <?php echo $purchase['total_price']; ?> €
-                            (Passée le <?php echo $purchase['created_at']; ?>)
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>Vous n'avez encore rien acheté.</p>
-            <?php endif; ?>
-        </section>
-        <?php endif; ?>
-
-        <footer>
-            <a href="index.php"><button>🏠 Revenir à l'accueil</button></a>
-            <a href="logout.php"><button>🚪 Se déconnecter</button></a>
-        </footer>
-    </div>
-
 </body>
 </html>
