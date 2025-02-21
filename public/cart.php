@@ -17,7 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
 // Vérifier si le panier est vide
 if (empty($_SESSION['cart'])) {
-    echo "<h1>Votre panier est vide.</h1>";
+    echo '
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Panier vide" width="200">
+        <h1 style="font-family: Arial, sans-serif; color: #333; margin-top: 20px;">Votre panier est vide 😢</h1>
+        <p style="color: #666; font-size: 18px;">Ajoutez des articles à votre panier pour passer commande.</p>
+        <a href="index.php" style="margin-top: 20px; padding: 12px 24px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 6px; font-size: 18px;">Continuer vos achats</a>
+    </div>';
     exit;
 }
 
@@ -40,81 +46,8 @@ foreach ($_SESSION['cart'] as $item) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Votre Panier</title>
-</head>
-<body>
-    <h1>Votre Panier</h1>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Article</th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($_SESSION['cart'] as $key => $item): ?>
-                <tr>
-                    <td><img src="<?php echo htmlspecialchars($item['image']); ?>" width="50" alt="Image produit"></td>
-                    <td><?php echo htmlspecialchars($item['title']); ?></td>
-                    <td><?php echo htmlspecialchars($item['price']); ?> €</td>
-                    <td><?php echo $item['quantity']; ?></td>
-                    <td><?php echo $item['price'] * $item['quantity']; ?> €</td>
-                    <td>
-                        <form method="post" action="cart.php">
-                            <input type="hidden" name="delete_key" value="<?php echo $key; ?>">
-                            <button type="submit" name="delete">🗑️ Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <h2>Total : <?php echo $total; ?> €</h2>
-    <h3>Votre solde disponible : <?php echo number_format($balance, 2); ?> €</h3>
-
-    <h2>Informations de Livraison & Facturation</h2>
-    <form action="payment.php" method="POST">
-        <h3>Informations de Livraison</h3>
-        <label for="shipping_name">Nom :</label>
-        <input type="text" name="shipping_name" required><br><br>
-        <label for="shipping_address">Adresse :</label>
-        <input type="text" name="shipping_address" required><br><br>
-        <label for="shipping_city">Ville :</label>
-        <input type="text" name="shipping_city" required><br><br>
-        <label for="shipping_zip">Code Postal :</label>
-        <input type="text" name="shipping_zip" required><br><br>
-        <label for="shipping_country">Pays :</label>
-        <input type="text" name="shipping_country" required><br><br>
-        <h3>Informations de Facturation</h3>
-        <label for="billing_name">Nom :</label>
-        <input type="text" name="billing_name" required><br><br>
-        <label for="billing_address">Adresse :</label>
-        <input type="text" name="billing_address" required><br><br>
-        <label for="billing_city">Ville :</label>
-        <input type="text" name="billing_city" required><br><br>
-        <label for="billing_zip">Code Postal :</label>
-        <input type="text" name="billing_zip" required><br><br>
-        <label for="billing_country">Pays :</label>
-        <input type="text" name="billing_country" required><br><br>
-        <h2>Méthode de paiement</h2>
-        <label>
-            <input type="radio" name="payment_method" value="stripe" checked> Payer avec Stripe
-        </label>
-        <br>
-        <label>
-            <input type="radio" name="payment_method" value="balance"> Payer avec mon solde
-        </label>
-        <br><br>
-        <button type="submit">Procéder au paiement</button>
-    </form>
-    <a href="index.php">Continuer mes achats</a>
+    <!-- Intégration de Google Fonts pour une typographie moderne -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         /* Global */
@@ -136,7 +69,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         h1, h2, h3 {
             text-align: center;
-            color: #4CAF50;
+            color: ##4CAF50;
         }
         h1 {
             margin-bottom: 30px;
@@ -215,7 +148,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         .payment-form input:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: ##4CAF50;
             box-shadow: 0 0 5px rgba(0,123,255,0.5);
         }
         .payment-form .radio-group {
@@ -225,7 +158,7 @@ foreach ($_SESSION['cart'] as $item) {
         }
         .payment-form button {
             padding: 12px 20px;
-            background-color: #4CAF50;
+            background-color: ##4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -258,5 +191,83 @@ foreach ($_SESSION['cart'] as $item) {
             }
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Votre Panier</h1>
+        
+        <!-- Affichage des articles en cartes -->
+        <div class="cart-items">
+            <?php foreach ($_SESSION['cart'] as $key => $item): ?>
+            <div class="cart-item">
+                <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="Image produit">
+                <h3><?php echo htmlspecialchars($item['title']); ?></h3>
+                <p>Prix : <?php echo htmlspecialchars($item['price']); ?> €</p>
+                <p>Quantité : <?php echo $item['quantity']; ?></p>
+                <p>Total : <?php echo $item['price'] * $item['quantity']; ?> €</p>
+                <form method="post" action="cart.php">
+                    <input type="hidden" name="delete_key" value="<?php echo $key; ?>">
+                    <button type="submit" name="delete" class="btn-delete">❌ Supprimer</button>
+                </form>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        
+        <!-- Récapitulatif du panier -->
+        <div class="cart-summary">
+            <p><strong>Total : <?php echo $total; ?> €</strong></p>
+            <p>Votre solde disponible : <?php echo number_format($balance, 2); ?> €</p>
+        </div>
+        
+        <!-- Formulaire de paiement -->
+        <div class="payment-form">
+            <h2>Informations de Livraison & Facturation</h2>
+            <form action="payment.php" method="POST">
+                <h3>Informations de Livraison</h3>
+                <label for="shipping_name">Nom :</label>
+                <input type="text" name="shipping_name" id="shipping_name" required>
+                
+                <label for="shipping_address">Adresse :</label>
+                <input type="text" name="shipping_address" id="shipping_address" required>
+                
+                <label for="shipping_city">Ville :</label>
+                <input type="text" name="shipping_city" id="shipping_city" required>
+                
+                <label for="shipping_zip">Code Postal :</label>
+                <input type="text" name="shipping_zip" id="shipping_zip" required>
+                
+                <label for="shipping_country">Pays :</label>
+                <input type="text" name="shipping_country" id="shipping_country" required>
+                
+                <h3>Informations de Facturation</h3>
+                <label for="billing_name">Nom :</label>
+                <input type="text" name="billing_name" id="billing_name" required>
+                
+                <label for="billing_address">Adresse :</label>
+                <input type="text" name="billing_address" id="billing_address" required>
+                
+                <label for="billing_city">Ville :</label>
+                <input type="text" name="billing_city" id="billing_city" required>
+                
+                <label for="billing_zip">Code Postal :</label>
+                <input type="text" name="billing_zip" id="billing_zip" required>
+                
+                <label for="billing_country">Pays :</label>
+                <input type="text" name="billing_country" id="billing_country" required>
+                
+                <h2>Méthode de paiement</h2>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="payment_method" value="stripe" checked> Payer avec Stripe
+                    </label>
+                    <label>
+                        <input type="radio" name="payment_method" value="balance"> Payer avec mon solde
+                    </label>
+                </div>
+                <button type="submit">Procéder au paiement</button>
+            </form>
+        </div>
+        <a href="index.php" class="btn-secondary">Continuer mes achats</a>
+    </div>
 </body>
 </html>
