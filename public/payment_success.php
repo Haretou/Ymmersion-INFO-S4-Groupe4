@@ -1,4 +1,4 @@
-    <?php
+<?php
     require_once '../config/config.php';
     require_once '../vendor/autoload.php';
 
@@ -12,7 +12,7 @@
 
     if (isset($_GET["session_id"])) {
         $session = \Stripe\Checkout\Session::retrieve($_GET["session_id"]);
-        
+
         if ($session && $session->payment_status === "paid") {
             $user_id = $_SESSION["user_id"];
             $amount = $session->amount_total / 100; // Convertir en euros
@@ -45,4 +45,3 @@
         <a href="index.php">Retour à l'accueil</a>
     </body>
     </html>
-

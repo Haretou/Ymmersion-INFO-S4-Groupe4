@@ -1,4 +1,4 @@
-<?php
+login.php <?php
 require_once '../config/config.php';
 session_start();
 
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php"); // Redirection vers l'accueil
         exit;
     } else {
-        $error = "Email ou mot de passe incorrect.";
+        echo "Email ou mot de passe incorrect.";
     }
 }
 ?>
@@ -26,7 +26,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Connexion</title>
+</head>
+<body>
+    <h2>Connexion</h2>
+    <form method="post">
+        <label>Email :</label>
+        <input type="email" name="email" required>
+        <label>Mot de passe :</label>
+        <input type="password" name="password" required>
+        <button type="submit">Se connecter</button>
+    </form>
     <style>
         /* Styles globaux */
         body {
@@ -49,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             width: 100%;
         }
 
-        /* Boîte de connexion */
+        /* BoÃ®te de connexion */
         .login-box {
             background: rgba(255, 255, 255, 0.9);
             padding: 30px;
@@ -114,23 +125,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: underline;
         }
     </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Connexion</h2>
-            <?php if (isset($error)): ?>
-                <p class="error"><?php echo $error; ?></p>
-            <?php endif; ?>
-            <form method="post">
-                <label>Email :</label>
-                <input type="email" name="email" required>
-                <label>Mot de passe :</label>
-                <input type="password" name="password" required>
-                <button type="submit">Se connecter</button>
-            </form>
-            <p class="register-link">Pas encore de compte ? <a href="register.php">Inscrivez-vous</a></p>
-        </div>
-    </div>
 </body>
 </html>
