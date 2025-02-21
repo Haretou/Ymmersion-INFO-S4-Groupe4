@@ -1,4 +1,4 @@
-login.php <?php
+<?php
 require_once '../config/config.php';
 session_start();
 
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php"); // Redirection vers l'accueil
         exit;
     } else {
-        echo "Email ou mot de passe incorrect.";
+        $error_message = "Email ou mot de passe incorrect.";
     }
 }
 ?>
@@ -26,20 +26,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Connexion</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Connexion</h2>
-    <form method="post">
-        <label>Email :</label>
-        <input type="email" name="email" required>
-        <label>Mot de passe :</label>
-        <input type="password" name="password" required>
-        <button type="submit">Se connecter</button>
-    </form>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Connexion</h2>
+
+            <?php if (isset($error_message)): ?>
+                <div class="error"><?php echo htmlspecialchars($error_message); ?></div>
+            <?php endif; ?>
+
+            <form method="post">
+                <div class="input-group">
+                    <label for="email">Email :</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <button type="submit">Se connecter</button>
+            </form>
+
+            <div class="register-link">
+                <p>Pas encore de compte ? <a href="register.php">Créer un compte</a></p>
+            </div>
+        </div>
+    </div>
+
     <style>
-        /* Styles globaux */
+        /* Style global */
         body {
             font-family: 'Arial', sans-serif;
             background: url('background.jpg') no-repeat center center/cover;
@@ -50,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #fff;
         }
 
         /* Conteneur principal */
@@ -58,16 +77,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             width: 100%;
+            height: 100%;
         }
 
-        /* BoÃ®te de connexion */
+        /* Boîte de connexion */
         .login-box {
             background: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            width: 350px;
         }
 
         /* Titre */
@@ -77,20 +98,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         /* Champs de formulaire */
-        input[type="email"], input[type="password"] {
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .input-group input {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            margin-top: 6px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1em;
+            background-color: #f9f9f9;
         }
 
-        /* Bouton */
+        .input-group input:focus {
+            border-color: #007bff;
+            background-color: #f1f1f1;
+            outline: none;
+        }
+
+        /* Bouton de connexion */
         button {
             background-color: #007bff;
             color: white;
-            padding: 10px;
+            padding: 12px;
             border: none;
             width: 100%;
             border-radius: 5px;
@@ -108,11 +146,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: red;
             font-size: 0.9em;
             margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
         }
 
         /* Lien d'inscription */
         .register-link {
-            margin-top: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
         }
 
         .register-link a {
@@ -123,6 +166,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .register-link a:hover {
             text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 20px;
+            }
+
+            .input-group input, button {
+                font-size: 0.9em;
+            }
         }
     </style>
 </body>
