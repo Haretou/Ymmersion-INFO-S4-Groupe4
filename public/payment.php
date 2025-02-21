@@ -77,10 +77,14 @@ if ($payment_method === "balance") {
     try {
         $checkout_session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
-            'line_items' => array_map(fn($item) => [
-                'price_data' => ['currency' => 'eur', 'product_data' => ['name' => $item['title']], 'unit_amount' => $item['price'] * 100],
-                'quantity' => $item['quantity'],
-            ], $_SESSION['cart']),
+            'line_items' => array_values(array_map(fn($item) => [
+    'price_data' => [
+        'currency' => 'eur',
+        'product_data' => ['name' => $item['title']],
+        'unit_amount' => $item['price'] * 100
+    ],
+    'quantity' => $item['quantity'],
+], $_SESSION['cart'])),
             'mode' => 'payment',
             'customer_email' => $email,
             'success_url' => 'http://localhost:8888/php_exam/Ymmersion-INFO-S4-Groupe4/public/payment_success.php',
