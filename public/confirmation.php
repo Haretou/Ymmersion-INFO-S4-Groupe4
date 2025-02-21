@@ -1,4 +1,4 @@
-<?php
+confirmation.php <?php
 require_once '../config/config.php';
 require_once '../vendor/autoload.php'; // Charger Stripe SDK
 require_once 'send_email.php'; // Inclure le fichier d'envoi d'email
