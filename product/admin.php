@@ -1,8 +1,8 @@
 <?php
 session_start();
-require '../config/config.php'; // Fichier de connexion à la base de données
+require '../config/config.php'; // Fichier de connexion 脿 la base de donn茅es
 
-// Vérification de l'authentification et du rôle administrateur
+// V茅rification de l'authentification et du r么le administrateur
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: ..//index.php');
     exit();
@@ -26,10 +26,10 @@ if (isset($_GET['delete_user'])) {
     exit();
 }
 
-// Récupération des articles
+// R茅cup茅ration des articles
 $articles = $pdo->query("SELECT * FROM articles")->fetchAll(PDO::FETCH_ASSOC);
 
-// Récupération des utilisateurs
+// R茅cup茅ration des utilisateurs
 $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -150,9 +150,9 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <div class="navbar">
-        <a href="../public/index.php" class="btn-back">🏠 Retour à l'accueil</a>
+        <a href="../public/index.php" class="btn-back"> Retour à l'accueil</a>
         <h1>Panneau Administrateur</h1>
-        <a href="../public/logout.php" class="btn-back">🚪 Se Déconnecter</a>
+        <a href="../public/logout.php" class="btn-back"> Se Déconnecter</a>
     </div>
 
     <div class="container">
@@ -169,7 +169,7 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($article['title']) ?></td>
                     <td class="actions">
                         <a href="edit.php?id=<?= $article['id'] ?>" class="btn-edit">Modifier</a>
-                        <a href="admin.php?delete_article=<?= $article['id'] ?>" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">Supprimer</a>
+                        <a href="admin.php?delete_article=<?= $article['id'] ?>" class="btn-delete" onclick="return confirm('Etes-vous sur de vouloir supprimer cet article ?');">Supprimer</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -180,7 +180,7 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>ID</th>
                 <th>Email</th>
-                <th>Rôle</th>
+                <th>R么le</th>
                 <th>Actions</th>
             </tr>
             <?php foreach ($users as $user) : ?>
@@ -190,7 +190,7 @@ $users = $pdo->query("SELECT * FROM users")->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['role']) ?></td>
                     <td class="actions">
                         <a href="edit_user.php?id=<?= $user['id'] ?>" class="btn-edit">Modifier</a>
-                        <a href="admin.php?delete_user=<?= $user['id'] ?>" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
+                        <a href="admin.php?delete_user=<?= $user['id'] ?>" class="btn-delete" onclick="return confirm('Etes-vous sur de vouloir supprimer cet utilisateur ?');">Supprimer</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
