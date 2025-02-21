@@ -44,6 +44,7 @@ if ($is_own_account) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compte de <?php echo htmlspecialchars($user['username']); ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -52,10 +53,10 @@ if ($is_own_account) {
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
             color: #333;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
         h1, h2, h3 {
@@ -63,12 +64,12 @@ if ($is_own_account) {
         }
 
         .profile-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         header {
@@ -77,22 +78,22 @@ if ($is_own_account) {
         }
 
         .user-info, .balance-section, .articles-section, .favorites-section, .purchases-section {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .item-list {
             list-style: none;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .item-list li {
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .article-link, .favorite-link {
-            color: #2980b9;
+            color: #3498db;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 500;
         }
 
         .article-link:hover, .favorite-link:hover {
@@ -100,21 +101,23 @@ if ($is_own_account) {
         }
 
         .balance-form input {
-            padding: 10px;
+            padding: 12px;
             font-size: 1rem;
-            width: 200px;
-            margin-right: 10px;
+            width: 220px;
+            margin-right: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
         }
 
         .balance-form button {
-            padding: 10px 15px;
+            padding: 12px 18px;
             background-color: #27ae60;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             color: white;
+            font-weight: 600;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .balance-form button:hover {
@@ -124,14 +127,16 @@ if ($is_own_account) {
         .buttons-container {
             display: flex;
             justify-content: space-between;
+            gap: 15px;
         }
 
         button {
             padding: 12px 20px;
             font-size: 1rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .btn-main {
@@ -150,6 +155,16 @@ if ($is_own_account) {
 
         .btn-secondary:hover {
             background-color: #c0392b;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #7f8c8d;
         }
     </style>
 </head>

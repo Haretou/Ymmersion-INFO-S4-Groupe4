@@ -9,7 +9,7 @@ $is_admin = false;
 // Si l'utilisateur est connecté, récupérer son rôle
 if ($is_logged_in) {
     if (!isset($_SESSION["role"])) {
-        // Récup le rôle de la session 
+        // Récupération du rôle de la session 
         $stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
         $stmt->execute([$_SESSION["user_id"]]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -92,59 +92,67 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
     </nav>
 
-    <h1>Bienvenue au PokéStore</h1>
+    <header>
+        <h1>Bienvenue au PokéStore</h1>
+    </header>
 
     <!-- Barre de recherche -->
-    <form action="index.php" method="GET">
-        <input type="text" name="search" placeholder="Rechercher un produit" value="<?php echo htmlspecialchars($search_query); ?>">
-        <button type="submit">Rechercher</button>
-    </form>
+    <div class="search-bar">
+        <form action="index.php" method="GET">
+            <input type="text" name="search" placeholder="Rechercher un produit" value="<?php echo htmlspecialchars($search_query); ?>">
+            <button type="submit">Rechercher</button>
+        </form>
+    </div>
 
     <!-- Filtre par catégorie -->
-    <h3>Catégories</h3>
-    <ul>
-        <li><a href="index.php">Toutes les catégories</a></li>
-        <?php foreach ($categories as $category): ?>
-            <li><a href="index.php?category=<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></a></li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="filter-container">
+        <h3>Catégories</h3>
+        <ul>
+            <li><a href="index.php">Toutes les catégories</a></li>
+            <?php foreach ($categories as $category): ?>
+                <li><a href="index.php?category=<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 
     <!-- Tri des articles -->
-    <h3>Trier par</h3>
-    <form action="index.php" method="GET">
-        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
-        <input type="hidden" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
-        <select name="sort" onchange="this.form.submit()">
-            <option value="created_at" <?php if (!isset($_GET['sort'])) echo 'selected'; ?>>Date</option>
-            <option value="price_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'price_asc') echo 'selected'; ?>>Prix croissant</option>
-            <option value="price_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'price_desc') echo 'selected'; ?>>Prix décroissant</option>
-        </select>
-    </form>
+    <div class="sort-container">
+        <h3>Trier par</h3>
+        <form action="index.php" method="GET">
+            <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
+            <input type="hidden" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
+            <select name="sort" onchange="this.form.submit()">
+                <option value="created_at" <?php if (!isset($_GET['sort'])) echo 'selected'; ?>>Date</option>
+                <option value="price_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'price_asc') echo 'selected'; ?>>Prix croissant</option>
+                <option value="price_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'price_desc') echo 'selected'; ?>>Prix décroissant</option>
+            </select>
+        </form>
+    </div>
 
     <h2>Nos articles en vente</h2>
-    <?php if (count($articles) > 0): ?>
-        <ul>
+
+    <div class="articles-list">
+        <?php if (count($articles) > 0): ?>
             <?php foreach ($articles as $article): ?>
-                <li>
+                <div class="article-item">
                     <h3><?php echo htmlspecialchars($article['title']); ?></h3>
                     <p><strong>Description :</strong> <?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
                     <p><strong>Prix :</strong> <?php echo htmlspecialchars($article['price']); ?> €</p>
                     <p><strong>Stock :</strong> <?php echo htmlspecialchars($article['stock']); ?></p>
 
-                        <!-- Affichage de l'image de l'article -->
-                        <?php if (!empty($article['image'])): ?>
-                            <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article" width="100">
-                        <?php endif; ?>
+                    <!-- Affichage de l'image de l'article -->
+                    <?php if (!empty($article['image'])): ?>
+                        <img src="../uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Image de l'article">
+                    <?php endif; ?>
 
-                        <!-- Lien vers la page du produit -->
-                        <a href="../product/product.php?id=<?php echo $article['id']; ?>">Voir l'article</a>
-
-                </li>
+                    <!-- Lien vers la page du produit -->
+                    <a href="../product/product.php?id=<?php echo $article['id']; ?>">Voir l'article</a>
+                </div>
             <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Aucun article disponible.</p>
-    <?php endif; ?>
+        <?php else: ?>
+            <p>Aucun article disponible.</p>
+        <?php endif; ?>
+    </div>
 
     <style>
         body {
@@ -156,11 +164,12 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         header {
-            background-color: #333;
-            color: white;
+            background-color: transparent; /* Retire la couleur de fond noire */
+            color: #333; /* La couleur du texte reste foncée */
             padding: 1rem;
             text-align: center;
         }
+
 
         nav {
             background-color: #4CAF50;
@@ -182,36 +191,37 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #45a049;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 1rem;
+        .search-bar, .filter-container, .sort-container {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
-        select, input[type="text"], button {
+        .search-bar input, .search-bar button {
             padding: 0.6rem;
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 1rem;
-            margin: 0.5rem 0;
-            width: 100%;
-            max-width: 300px;
+            width: 80%;
+            max-width: 500px;
         }
 
-        .article-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
+        .filter-container, .sort-container {
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .articles-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
         }
 
         .article-item {
             background-color: white;
-            border-radius: 8px;
             padding: 1rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 48%;
-            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             text-align: center;
         }
 
@@ -221,14 +231,24 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
             max-height: 250px;
             object-fit: cover;
             border-radius: 5px;
+            margin-bottom: 1rem;
         }
 
-        footer {
-            background-color: #333;
+        .article-item a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
             color: white;
-            text-align: center;
-            padding: 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .article-item a:hover {
+            background-color: #45a049;
         }
     </style>
+
 </body>
 </html>
